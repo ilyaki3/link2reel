@@ -12,6 +12,8 @@ description: Делает вертикальный ролик (Reels / Shorts / 
 
 ## 0. Проверка окружения (один раз за сессию)
 
+`bash <навык>/tools/doctor.sh` — проверяет программы, навыки-зависимости, ключ и голос ElevenLabs; под каждым ✗ — команда для исправления. Голос выбрать: `python3 <навык>/tools/voices.py` → `voices.py <voice_id>`.
+
 - Голос по умолчанию — **ElevenLabs**, ваш голос из `channel.json → voice.voice_id` (свой, созданный в Voice Design, или встроенный), модель `eleven_v4`, ускорение `speed` 1.2 через atempo после синтеза (rubberband не использовать — звучит электронно) (`channel.json → voice`). Ключ — `$ELEVENLABS_API_KEY` в `~/.zshrc`.
 - **Бесплатный тариф: 10 000 символов в месяц, голоса из библиотеки через API недоступны** — только встроенные и созданные самим пользователем. Символы берегут: не генерировать пробы и дубли без просьбы; переозвучивать только изменённую сцену (`--only`). Перед озвучкой проверь остаток: `curl -s https://api.elevenlabs.io/v1/user/subscription -H "xi-api-key: $ELEVENLABS_API_KEY"` → `character_limit - character_count`; ролик ≈ 600–800 символов.
 - Запасные: `--provider heygen` (нужен `npx hyperframes auth login`; русские голоса слабые) и `--provider edge` (только черновик).
