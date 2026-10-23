@@ -12,7 +12,7 @@
   heygen — media-use/audio/scripts/heygen-tts.mjs (нужен `npx hyperframes auth login`), тайминги слов из API.
   edge   — бесплатный Edge TTS, только для черновиков (нужен python с пакетом edge-tts: --python путь).
 """
-import argparse, base64, json, os, re, subprocess, sys, tempfile, urllib.error, urllib.request
+import argparse, base64, json, os, re, subprocess, sys, tempfile, time, urllib.error, urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL = os.path.dirname(HERE)
@@ -116,7 +116,15 @@ asyncio.run(main())
 '''
     mp3 = wav[:-4] + ".mp3"
     rate = f"{round((speed - 1) * 100):+d}%"
-    run([python, "-I", "-c", code, text, mp3, words_path, voice or EDGE_VOICE.get(lang, EDGE_VOICE["en"]), rate])
+    # Edge TTS иногда не отдаёт звук (NoAudioReceived) — это сбой сервиса, пробуем ещё раз.
+    for attempt in range(4):
+        r = subprocess.run([python, "-I", "-c", code, text, mp3, words_path, voice or EDGE_VOICE.get(lang, EDGE_VOICE["en"]), rate],
+                           capture_output=True, text=True)
+        if r.returncode == 0:
+            break
+        time.sleep(2 + attempt * 3)
+    else:
+        sys.exit("Edge TTS не ответил после 4 попыток:\n" + r.stderr[-800:])
     run(["ffmpeg", "-y", "-v", "error", "-i", mp3, "-ar", "44100", "-ac", "1", wav])
     os.unlink(mp3)
     return load_json(words_path)
