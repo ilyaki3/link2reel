@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Проверка окружения навыка /short. Ничего не устанавливает и не тратит символы ElevenLabs.
+# Проверка окружения навыка /link2reel. Ничего не устанавливает и не тратит символы ElevenLabs.
 #   bash tools/doctor.sh
 SKILL="$(cd "$(dirname "$0")/.." && pwd)"
 ok=0; bad=0
@@ -42,12 +42,12 @@ echo "Голос"
 if [ -z "$ELEVENLABS_API_KEY" ]; then
   fail "ELEVENLABS_API_KEY не задан" "read -s \"K?ElevenLabs API key: \" && echo \"export ELEVENLABS_API_KEY=\\\"\$K\\\"\" >> ~/.zshrc && unset K && source ~/.zshrc"
 else
-  code=$(curl -s -o /tmp/short-doctor-sub.json -w "%{http_code}" https://api.elevenlabs.io/v1/user/subscription -H "xi-api-key: $ELEVENLABS_API_KEY")
+  code=$(curl -s -o /tmp/link2reel-doctor-sub.json -w "%{http_code}" https://api.elevenlabs.io/v1/user/subscription -H "xi-api-key: $ELEVENLABS_API_KEY")
   if [ "$code" = "200" ]; then
-    left=$(python3 -c 'import json;d=json.load(open("/tmp/short-doctor-sub.json"));print(d["character_limit"]-d["character_count"], "из", d["character_limit"], "·", d["tier"])')
+    left=$(python3 -c 'import json;d=json.load(open("/tmp/link2reel-doctor-sub.json"));print(d["character_limit"]-d["character_count"], "из", d["character_limit"], "·", d["tier"])')
     pass "ключ ElevenLabs работает · осталось символов: $left"
   else fail "ключ ElevenLabs отвечает $code" "проверь ключ и права: Text to Speech, Voices read/write, Models read, User read"; fi
-  rm -f /tmp/short-doctor-sub.json
+  rm -f /tmp/link2reel-doctor-sub.json
 fi
 vid=$(python3 -c "import json;print(json.load(open('$SKILL/channel.json'))['voice'].get('voice_id') or '')")
 [ -n "$vid" ] && pass "voice_id в channel.json: $vid" || fail "voice_id не задан в channel.json" "python3 $SKILL/tools/voices.py — выбери голос и впиши его id"
@@ -66,9 +66,9 @@ if [ "$1" = "--fix-dash-rule" ] && [ -n "$HR" ]; then
 
 Фидбек: в сценариях роликов тире — это пауза для голоса ElevenLabs. Без тире диктор читает фразу слитно.
 
-Правило: в тексте озвучки (поля `say` в script.json и колонка «Текст озвучки» в SCRIPT.md навыка /short) длинное тире «—» не снимать и не заменять. Остальные правки действуют. В подписях к постам (POSTS.md) тире снимаются как обычно.
+Правило: в тексте озвучки (поля `say` в script.json и колонка «Текст озвучки» в SCRIPT.md навыка /link2reel) длинное тире «—» не снимать и не заменять. Остальные правки действуют. В подписях к постам (POSTS.md) тире снимаются как обычно.
 
-Область: сценарии для озвучки навыка /short
+Область: сценарии для озвучки навыка /link2reel
 EOF
   echo "Правило про тире добавлено в $HR/edit-log.md"
 fi

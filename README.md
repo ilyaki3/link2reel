@@ -1,9 +1,9 @@
-# /short — вертикальные ролики о проектах силами Claude Code
+# /link2reel — вертикальные ролики о проектах силами Claude Code
 
 Даёшь ссылку на GitHub-репозиторий, сайт или название инструмента — Claude Code сам изучает проект, пишет сценарий с цепляющим хуком, собирает ролик 9:16 в стиле проекта, озвучивает его, ставит субтитры и готовит тексты постов для YouTube Shorts, Instagram Reels и TikTok.
 
 ```
-/short https://github.com/owner/repo
+/link2reel https://github.com/owner/repo
 ```
 
 Ролик собирается из кода ([HyperFrames](https://github.com/heygen-com/hyperframes): HTML → MP4), поэтому камера и монтажёр не нужны. Озвучка — [ElevenLabs](https://elevenlabs.io). Язык роликов по умолчанию — русский.
@@ -53,13 +53,13 @@ brew install node ffmpeg python gh
 ### 2. Навык и его зависимости
 
 ```bash
-npx skills add ilyaki3/short-skill -g -a claude-code       # сам навык /short
+npx skills add ilyaki3/link2reel -g -a claude-code       # сам навык /link2reel
 npx hyperframes skills update                              # движок видео HyperFrames
 npx skills add ilyautov/humanizer-ru -g -a claude-code     # вычитка русского текста
 python3 -m pip install --user pymorphy3==2.0.6 razdel==0.5.0   # сканер для humanizer-ru
 ```
 
-Или вручную: `git clone https://github.com/ilyaki3/short-skill ~/.claude/skills/short`.
+Или вручную: `git clone https://github.com/ilyaki3/link2reel ~/.claude/skills/link2reel`.
 
 ### 3. ElevenLabs: ключ
 
@@ -84,20 +84,20 @@ Deep Russian male baritone, middle-aged, native Moscow accent. Confident, premiu
 Затем выбери голос для навыка:
 
 ```bash
-python3 ~/.claude/skills/short/tools/voices.py              # список твоих голосов с id
-python3 ~/.claude/skills/short/tools/voices.py <voice_id>   # записать в channel.json
+python3 ~/.claude/skills/link2reel/tools/voices.py              # список твоих голосов с id
+python3 ~/.claude/skills/link2reel/tools/voices.py <voice_id>   # записать в channel.json
 ```
 
 ### 5. Проверка
 
 ```bash
-bash ~/.claude/skills/short/tools/doctor.sh
+bash ~/.claude/skills/link2reel/tools/doctor.sh
 ```
 
 Проверяет программы, навыки, ключ, голос и остаток символов. Под каждым ✗ — команда для исправления. Правило про тире для humanizer-ru (тире в озвучке — это паузы голоса) добавляется так:
 
 ```bash
-bash ~/.claude/skills/short/tools/doctor.sh --fix-dash-rule
+bash ~/.claude/skills/link2reel/tools/doctor.sh --fix-dash-rule
 ```
 
 ### 6. (Необязательно) Бесплатный черновой голос
@@ -117,7 +117,7 @@ Claude вызовет его сам: `voice.py <проект> --provider edge --
 Открой Claude Code в любой папке и напиши:
 
 ```
-/short https://github.com/Graphify-Labs/graphify
+/link2reel https://github.com/Graphify-Labs/graphify
 ```
 
 Дальше:
@@ -125,7 +125,7 @@ Claude вызовет его сам: `voice.py <проект> --provider edge --
 2. Присылает черновое видео → «озвучивай» или правки по картинке.
 3. Присылает готовый ролик, обложку и тексты постов.
 
-Примеры запросов: `/short https://cleanyour.tv`, `/short Excalidraw --auto`, `/short <ссылка> --like ~/Downloads/viral.mp4`.
+Примеры запросов: `/link2reel https://cleanyour.tv`, `/link2reel Excalidraw --auto`, `/link2reel <ссылка> --like ~/Downloads/viral.mp4`.
 
 ## Настройки — `channel.json`
 
