@@ -1,0 +1,25 @@
+{
+  "videos_root": "~/Movies/shorts",
+  "language": "ru",
+  "voice": {
+    "provider": "elevenlabs",
+    "voice_id": null,
+    "voice_name": "впиши имя своего голоса",
+    "model": "eleven_v4",
+    "stability": 0.45,
+    "similarity": 0.8,
+    "speed": 1.2,
+    "gap": 0.22
+  },
+  "length_sec": [
+    30,
+    40
+  ],
+  "handle": null,
+  "pronounce": {
+    "GitHub": "Гитхаб",
+    "HTML": "эйч ти эм эль",
+    "API": "эй пи ай",
+    "CLI": "си эл ай"
+  }
+}

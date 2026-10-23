@@ -1,0 +1,60 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; pointer-events: none; }
+    .cap-g {
+      position: absolute; left: 0; width: 100%; bottom: 640px;
+      display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end;
+      gap: 6px 10px; padding: 0 90px; overflow: visible; opacity: 0; visibility: hidden;
+    }
+    .cap-w {
+      position: relative; display: inline-block; padding: 4px 14px 10px; isolation: isolate;
+      font-family: var(--font-display); font-weight: 800; font-size: 72px; line-height: 1;
+      text-transform: uppercase; color: var(--cap-ink, var(--ink)); letter-spacing: 0.01em;
+      text-shadow: var(--cap-shadow, 0 4px 18px rgba(0, 0, 0, 0.55));
+    }
+    .cap-bg {
+      position: absolute; inset: 0; z-index: -1; border-radius: 12px;
+      background: var(--accent, #ff5a36); opacity: 0;
+    }
+    .cap-t { position: relative; }
+  </style>
+  <div id="root" data-composition-id="captions" data-width="1080" data-height="1920">
+<!--GROUPS-->
+  </div>
+  <script>
+    (function () {
+      const GROUPS = /*DATA*/;
+      const css = getComputedStyle(document.documentElement);
+      const INK = (css.getPropertyValue("--cap-ink") || css.getPropertyValue("--ink")).trim() || "#f5f3ee";
+      const ON_ACCENT = css.getPropertyValue("--on-accent").trim() || "#ffffff";
+      const tl = gsap.timeline({ paused: true });
+      GROUPS.forEach((g, gi) => {
+        const el = document.getElementById("cap-g" + gi);
+        const text = g.words.map((w) => w.text.toUpperCase()).join(" ");
+        const fit = window.__hyperframes && window.__hyperframes.fitTextFontSize
+          ? window.__hyperframes.fitTextFontSize(text, { fontFamily: (css.getPropertyValue("--font-display") || "sans-serif").trim().replace(/"/g, ""), fontWeight: 800, maxWidth: 860 })
+          : { fontSize: 72 };
+        const size = Math.min(72, fit.fontSize);
+        el.querySelectorAll(".cap-w").forEach((w) => (w.style.fontSize = size + "px"));
+        tl.set(el, { visibility: "visible" }, g.start);
+        tl.fromTo(el, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.14, ease: "power3.out" }, g.start);
+        g.words.forEach((w, k) => {
+          const n = w.id.slice(1);
+          const bg = document.getElementById("cap-bg" + n);
+          const tx = bg.nextElementSibling;
+          // Подсвечено ровно одно слово: гаснет, когда начинается следующее (или через 0.25 с после конца).
+          const next = g.words[k + 1];
+          const off = next ? next.start : Math.min(w.end + 0.25, g.end - 0.1);
+          // Плашка появляется мгновенно, без растяжки — иначе тёмный текст на миг остаётся на тёмном фоне.
+          tl.set(bg, { opacity: 1 }, w.start);
+          tl.set(tx, { color: ON_ACCENT }, w.start);
+          tl.set(bg, { opacity: 0 }, Math.max(off, w.start + 0.08));
+          tl.set(tx, { color: INK }, Math.max(off, w.start + 0.08));
+        });
+        tl.to(el, { opacity: 0, duration: 0.1, ease: "power2.in" }, g.end - 0.1);
+        tl.set(el, { opacity: 0, visibility: "hidden" }, g.end);
+      });
+      window.__timelines["captions"] = tl;
+    })();
+  </script>
+</template>
