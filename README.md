@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/banner.png" alt="link2reel: ссылка на проект → готовый Reels, навык для Claude Code" width="100%"></p>
+
 # /link2reel — вертикальные ролики о проектах силами Claude Code
 
 Даёшь ссылку на GitHub-репозиторий, сайт или название инструмента — Claude Code сам изучает проект, пишет сценарий с цепляющим хуком, собирает ролик 9:16 в стиле проекта, озвучивает его, ставит субтитры и готовит тексты постов для YouTube Shorts, Instagram Reels и TikTok.
